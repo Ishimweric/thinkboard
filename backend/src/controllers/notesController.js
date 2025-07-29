@@ -1,9 +1,26 @@
-const getAllNotes = (req, res)=>{
-  res.status(200).json({"message" : "notes sent successfully"});
+import Note from "../models/Notes.js"
+const getAllNotes = async (req, res)=>{
+  try{
+    const notes = await Note.find({});
+    res.status(200).json(notes)
+  }catch(err){
+    res.status(500).json({"error" : "Internal server error"});
+    console.error("Failed to get data")
+  }
 }
 
-const createNote = (req, res)=>{
-  res.status(201).json({"message" : "note created successfully"})
+const createNote = async (req, res)=>{
+  try{
+    const {title, content} = req.body;
+    const newNote = new Note({ // mongoose way to insert a doc in a collection
+      title,
+      content
+    });
+    await newNote.save();
+    res.status(201).json(newNote)
+  }catch(err){
+    res.status(500).json({"message" : 'Server error'})
+  }
 }
 
 const updateNote = (req, res)=>{

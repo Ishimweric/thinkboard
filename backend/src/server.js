@@ -10,6 +10,8 @@ connectDB();
 
 const PORT = process.env.PORT || 3500;
 
+app.use(express.json())
+
 app.use("/api/notes", router);
 
 app.listen(PORT, ()=>{
