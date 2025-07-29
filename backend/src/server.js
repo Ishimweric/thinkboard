@@ -7,7 +7,11 @@ import rateLimiter from "./middleware/rateLimiter.js";
 dotenv.config();
 const app = express();
 
-connectDB();
+connectDB().then(()=>{
+  app.listen(PORT, ()=>{
+  console.log("SERVER RUNNING ON PORT 3500")
+  })
+})
 
 const PORT = process.env.PORT || 3500;
 
@@ -15,7 +19,3 @@ app.use(express.json());
 app.use(rateLimiter)
 
 app.use("/api/notes", router);
-
-app.listen(PORT, ()=>{
-  console.log("SERVER RUNNING ON PORT 3500")
-})
