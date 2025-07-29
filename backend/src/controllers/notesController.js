@@ -36,15 +36,37 @@ const updateNote = async (req, res)=>{
     const updatedNote = await Note.findByIdAndUpdate(id, {
       title,
       content
-    });
-    res.status(200).json(updatedNote);
+    }, {new : true});
+
+    // check if the note with a certain id was found
+    if (!updatedNote) {
+      return res.status(404).json({"message" : "Note not found"})
+    }else{
+      res.status(200).json(updatedNote);
+    }
   }catch (err) {
     res.status(500).json(err)
   }
 }
 
-const deleteNote = (req, res)=>{
-  res.status(200).json({"message" : "note deleted successfully"})
+const deleteNote = async (req, res)=>{
+  try{
+    const {id} = req.params;
+    // check if id is valid
+    if(!mongoose.Types.ObjectId.isValid(id)){
+      return res.status(400).json({"message" : "Invalid id"})
+    }
+    const deletedNote = await Note.findByIdAndDelete(id);
+
+    // check if the note with a certain id was found
+    if (!deletedNote) {
+      return res.status(404).json({"message" : "Note not found"})
+    }else{
+      res.status(200).json(deletedNote);
+    }
+  }catch(err){
+    res.status(500).json({"message" : "Server Error"})
+  }
 }
 
 export { getAllNotes, createNote , updateNote, deleteNote};
