@@ -10,6 +10,25 @@ const getAllNotes = async (req, res)=>{
   }
 }
 
+const getNote = async (req, res)=>{
+  try{
+    const {id} = req.params;
+    // check if id is valid
+    if(!mongoose.Types.ObjectId.isValid(id)){
+      return res.status(400).json({"message" : "Invalid id"})
+    }
+    const note = await Note.findById(id);
+    if (!note) {
+      return res.status(404).json({"message" : "Note not found"})
+    }else{
+      res.status(200).json(note);
+    }
+  }catch(err){
+    res.status(500).json({"error" : "Internal server error"});
+    console.error("Failed to get data")
+  }
+}
+
 const createNote = async (req, res)=>{
   try{
     const {title, content} = req.body;
@@ -69,4 +88,4 @@ const deleteNote = async (req, res)=>{
   }
 }
 
-export { getAllNotes, createNote , updateNote, deleteNote};
+export { getAllNotes, createNote , updateNote, deleteNote, getNote};
