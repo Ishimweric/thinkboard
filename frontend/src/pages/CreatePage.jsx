@@ -1,14 +1,46 @@
+import axios from "axios";
 import { ArrowLeft } from "lucide-react";
 import { useState } from "react"
+import toast from "react-hot-toast";
 import { Link } from "react-router-dom";
+import api from "../lib/axios";
 
 const CreatePage = () => {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
-  function handleSubmit(){
-
+  async function handleSubmit(e){
+    e.preventDefault();
+    //validation
+    if (!title.trim() || !content.trim()){
+      return toast.error("All fields are required!",{
+        duration: 5000
+      })
+    }
+    setIsLoading(true);
+    try {
+      await api.post("/notes",{
+        title,
+        content
+      });
+      toast.success("Note created successfully!", {
+        duration: 4000
+      });
+      // reset all fields
+      setTitle("");
+      setContent("");
+    }catch (err) {
+      if (err.response.status === 429){
+        toast.error("Bot mode detected, You're sending too many requests!", {
+          icon: "🐱‍👤"
+        })
+      }else{
+        toast.error("Failed to create note!");
+      }
+    }finally{
+      setIsLoading(false)
+    }
   }
 
   return (
@@ -35,6 +67,7 @@ const CreatePage = () => {
                     onChange={(e)=>setTitle(e.target.value)}
                     />
                 </div>
+
                 <div className="form-control mb-4">
                   <label className="label">
                     <span className="label-text">Content</span>
@@ -45,6 +78,12 @@ const CreatePage = () => {
                     value={content}
                     onChange={(e) => setContent(e.target.value)}
                   />
+                </div>
+
+                <div className="card-actions justify-end">
+                  <button type="submit" className="btn btn-primary" disabled={isLoading}>
+                    {isLoading? "Creating..." : "Create Note"}
+                  </button>
                 </div>
               </form>
             </div>
