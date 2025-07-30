@@ -33,10 +33,34 @@ const NoteDetails = () => {
   },[id]);
   
   const handleDelete = async()=>{
-
+    if (!window.confirm("Are you sure you want to delete this note")) return
+    try {
+      try {
+      await api.delete(`/notes/${id}`);
+      toast.success("Note deleted successfully!");
+      navigate("/")
+    }catch (err) {
+      toast.error("Failed to delete note!")
+    }
+    }catch (err) {
+      
+    }
   }
   const handleSave = async()=>{
-
+    if (!note.title.trim() || !note.content.trim()){
+      return toast.error("Please add a title and content!",{
+        duration: 5000
+      })
+    }
+    setIsSaving(true);
+    try {
+      await api.put(`/notes/${id}`, note);
+      toast.success("Note updated successfully!")
+    }catch (err) {
+      toast.error("Failed to update note!")
+    }finally{
+      setIsSaving(false)
+    }
   }
 
   if (isLoading) {
@@ -83,7 +107,7 @@ const NoteDetails = () => {
                   placeholder="Write your note here..."
                   className="textarea textarea-bordered h-32"
                   value={note.content}
-                  onChange={(e) => setContent({...note, content:e.target.value})}
+                  onChange={(e) => setNote({...note, content:e.target.value})}
                 />
               </div>
 
