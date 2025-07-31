@@ -55,7 +55,8 @@ const NoteDetails = () => {
     setIsSaving(true);
     try {
       await api.put(`/notes/${id}`, note);
-      toast.success("Note updated successfully!")
+      toast.success("Note updated successfully!");
+      navigate("/")
     }catch (err) {
       toast.error("Failed to update note!")
     }finally{
