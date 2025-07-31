@@ -11,6 +11,7 @@
 - **Rate Limiting**: Protects the API from excessive requests using Upstash Redis, ensuring fair usage and preventing abuse.
 - **Responsive Design**: Optimized for seamless viewing and interaction across all devices (mobile, tablet, desktop).
 - **Live Deployment**: Easily deployable to cloud platforms like Render. **You can visit the live application here: [https://thinkboard-frpj.onrender.com](https://thinkboard-frpj.onrender.com)**
+  * _**Note for Visitors:** As this service is hosted on Render's free tier, it may spin down due to inactivity. If you encounter a "502 Bad Gateway" error on your first visit, please **wait a few seconds and refresh the page**. The service will be waking up and should load successfully on the next attempt._
 - **CRUD Operations**: Full support for Create, Read (with future Update/Delete).
 
 ---
@@ -164,7 +165,7 @@ git push origin main # Or your primary deployment branch (e.g., 'master')
     * **Root Directory:** Set this to `backend`. This tells Render to execute commands from within your `backend` folder.
     * **Build Command:**
         ```bash
-        cd ../frontend && npm install && npm run build && cd ../backend && npm install
+        cd ../frontend && npm install && npm build && cd ../backend && npm install
         ```
         * *Explanation:* This comprehensive command first navigates to the `frontend` directory, installs its dependencies, builds the React app, then navigates back to the `backend` directory, and finally installs backend dependencies. This ensures your `dist` folder is prepared and all dependencies are ready.
     * **Start Command:**
